@@ -1,25 +1,37 @@
 import React, { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../components/AuthContext/AuthContext";
 
 const Navbar = () => {
+  const { user, logOut } = useContext(AuthContext);
 
+  const handleLogOut = () => {
+    logOut();
+  };
 
-    const {user} = useContext(AuthContext);
-
-
-    const links = <>
-    <li>
+  const links = (
+    <>
+      <li>
         <NavLink to="/">Home</NavLink>
-    </li>
-    <li>
+      </li>
+      <li>
         <NavLink to="/login">Login</NavLink>
-    </li>
-    <li>
+      </li>
+      <li>
         <NavLink to="/register">Register</NavLink>
-    </li>
+      </li>
+      <li>
+        <NavLink to="/about">About</NavLink>
+      </li>
+      {user && (
+        <>
+          <li>
+            <NavLink to="/data">Personal Data</NavLink>
+          </li>
+        </>
+      )}
     </>
-
+  );
 
   return (
     <div className="navbar bg-base-100 shadow-sm">
@@ -52,14 +64,19 @@ const Navbar = () => {
         <a className="btn btn-ghost text-xl">daisyUI</a>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-            {links}
-        </ul>
+        <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
-        {
-            user && user.email
-        }
+        {user ? (
+          <>
+            <p>{user.displayName || user.email}</p>
+            <button onClick={handleLogOut} className="ml-2 btn">
+              Log Out
+            </button>
+          </>
+        ) : (
+          <Link to="/login">LogIn</Link>
+        )}
       </div>
     </div>
   );

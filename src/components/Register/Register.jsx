@@ -1,14 +1,18 @@
-import React, { useContext, useState } from "react";
+import React, { useContext,  useState } from "react";
 import { AuthContext } from "../AuthContext/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const { registerUser } = useContext(AuthContext);
   const [error, setError] = useState("");
   const [emailErr, setEmailError] = useState("");
+
+  const nav = useNavigate()
+
   const handleRegister = (e) => {
     e.preventDefault();
-    const name = e.target.name.value;
-    const photo = e.target.photo.value;
+    /* const name = e.target.name.value;
+    const photo = e.target.photo.value; */
     const email = e.target.email.value;
     const password = e.target.password.value;
     const confirmPassword = e.target.confirmPassword.value;
@@ -37,9 +41,11 @@ const Register = () => {
     registerUser(email, password)
       .then((result) => {
         console.log(result.user);
+        e.target.reset()
+        nav('/')
       })
       .catch((error) => {
-        setError(error.message.split('/')[1].replace(')', ""));
+        setError(error.message.split("/")[1].replace(")", ""));
       });
   };
 
